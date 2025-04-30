@@ -1,11 +1,9 @@
-import 'package:falling_numbers/app/providers/number_provider.dart';
-
+import 'package:falling_numbers/app/controller/game_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class KeyBoard extends StatelessWidget {
   const KeyBoard({super.key});
-  //final rain = RainViewState();
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +17,8 @@ class KeyBoard extends StatelessWidget {
             children: List.generate(5, (index) {
               return ElevatedButton(
                 onPressed: () {
-                  // rain.removeDrops(index);
-                  context.read<NumberProvider>().shotNumber = index;
+                  var controller = context.read<GameController>();
+                  controller.removeDrops(index);
                 },
                 style: ButtonStyle(
                   fixedSize: WidgetStateProperty.all(Size(double.infinity, 60)),
@@ -48,8 +46,8 @@ class KeyBoard extends StatelessWidget {
             children: List.generate(5, (index) {
               return ElevatedButton(
                 onPressed: () {
-                  // rain.removeDrops(index + 5);
-                  context.read<NumberProvider>().shotNumber = index;
+                  var controller = context.read<GameController>();
+                  controller.removeDrops(index + 5);
                 },
                 style: ButtonStyle(
                   fixedSize: WidgetStateProperty.all(Size(double.infinity, 60)),

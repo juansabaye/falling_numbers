@@ -40,13 +40,14 @@ class SplashPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'Game Instructions:',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 300,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
                     SizedBox(height: 10),
