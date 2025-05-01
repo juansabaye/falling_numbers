@@ -6,11 +6,11 @@ class CloudWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: kToolbarHeight + MediaQuery.of(context).padding.top + 30,
+      height: 396,
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/clouds.png'),
-          fit: BoxFit.cover,
+          fit: BoxFit.fitWidth,
         ),
       ),
     );

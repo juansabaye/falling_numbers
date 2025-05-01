@@ -28,14 +28,14 @@ class KeyBoard extends StatelessWidget {
                     ),
                   ),
                   side: WidgetStateProperty.all<BorderSide>(
-                    BorderSide(color: Colors.white, width: 2),
+                    BorderSide(color: Colors.white, width: 1),
                   ),
 
                   backgroundColor: WidgetStateProperty.all<Color>(Colors.teal),
                 ),
                 child: Text(
                   '$index',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  style: TextStyle(color: Colors.white, fontSize: 24),
                 ),
               );
             }),
@@ -52,7 +52,7 @@ class KeyBoard extends StatelessWidget {
                 style: ButtonStyle(
                   fixedSize: WidgetStateProperty.all(Size(double.infinity, 60)),
                   side: WidgetStateProperty.all<BorderSide>(
-                    BorderSide(color: Colors.white, width: 2),
+                    BorderSide(color: Colors.white, width: 1),
                   ),
                   shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
@@ -63,7 +63,7 @@ class KeyBoard extends StatelessWidget {
                 ),
                 child: Text(
                   '${index + 5}',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  style: TextStyle(color: Colors.white, fontSize: 24),
                 ),
               );
             }),

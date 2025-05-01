@@ -21,8 +21,8 @@ class RainViewState extends State<RainView> {
 
   @override
   Widget build(BuildContext context) {
-    var controller = context.watch<GameController>();
-    var activeDrops = controller.activeDrops;
+    var provider = context.watch<GameController>();
+    var activeDrops = provider.activeDrops;
     return Stack(children: activeDrops);
   }
 }

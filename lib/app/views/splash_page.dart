@@ -10,25 +10,27 @@ class SplashPage extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/background.jpg'),
-            colorFilter: ColorFilter.matrix(<double>[
-              -1.0, 0.0, 0.0, 0.0, 255.0, //
-              0.0, -1.0, 0.0, 0.0, 255.0, //
-              0.0, 0.0, -1.0, 0.0, 255.0, //
-              0.0, 0.0, 0.0, 1.0, 0.0, //
-            ]),
+            image: AssetImage('assets/images/background.png'),
+            // colorFilter: ColorFilter.matrix(<double>[
+            //   -1.0, 0.0, 0.0, 0.0, 255.0, //
+            //   0.0, -1.0, 0.0, 0.0, 255.0, //
+            //   0.0, 0.0, -1.0, 0.0, 255.0, //
+            //   0.0, 0.0, 0.0, 1.0, 0.0, //
+            // ]),
             fit: BoxFit.cover,
           ),
         ),
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               const Text(
-                '5',
+                'Falling Numbers',
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 120,
+                  fontSize: 70,
                   fontWeight: FontWeight.bold,
+                  letterSpacing: -5,
                   color: Colors.white,
                 ),
               ),
@@ -45,9 +47,9 @@ class SplashPage extends StatelessWidget {
                     Text(
                       'Game Instructions:',
                       style: TextStyle(
-                        fontSize: 300,
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     ),
                     SizedBox(height: 10),
@@ -84,6 +86,7 @@ class SplashPage extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 80),
             ],
           ),
         ),

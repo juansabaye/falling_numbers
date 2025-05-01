@@ -38,7 +38,7 @@ class _NumberDropState extends State<NumberDrop>
         if (value >= MediaQuery.of(context).size.height - 200) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             var controller = context.read<GameController>();
-            controller.finishGame();
+            controller.finishGame(controller);
           });
         }
         return Positioned(
@@ -47,7 +47,7 @@ class _NumberDropState extends State<NumberDrop>
           child: Center(
             child: Text(
               '${widget.number}',
-              style: const TextStyle(color: Colors.black, fontSize: 18),
+              style: const TextStyle(color: Colors.white, fontSize: 18),
             ),
           ),
         );
