@@ -12,11 +12,15 @@ class GameController extends ChangeNotifier {
   int streak = 0;
   final Random random = Random();
   List<double> vpositions = [];
+  bool playingGame = true;
 
   BuildContext get context => navigatorKey.currentState!.context;
   void addNewDrops() async {
     for (int i = 0; i < dropCount; i++) {
       await Future.delayed(const Duration(milliseconds: 400));
+      while (!playingGame) {
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
       activeDrops.add(
         NumberDrop(
           number: random.nextInt(10),
@@ -85,9 +89,10 @@ class GameController extends ChangeNotifier {
     addNewDrops();
   }
 
-  void finishGame(controller) {
+  void finishGame(controller) async {
     activeDrops.clear();
     notifyListeners();
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: false,
@@ -100,6 +105,8 @@ class GameController extends ChangeNotifier {
   }
 
   void pause(controller) {
+    playingGame = false;
+    vpositions.clear();
     for (int i = 0; i < activeDrops.length; i++) {
       vpositions.add(activeDrops[i].vposition);
       activeDrops[i].paused = true;
@@ -117,10 +124,16 @@ class GameController extends ChangeNotifier {
   }
 
   void continueGame() {
+    playingGame = true;
+    for (int i = 0; i < activeDrops.length; i++) {
+      if (i < vpositions.length) {
+        activeDrops[i].vposition = vpositions[i];
+      }
+    }
     for (int i = 0; i < activeDrops.length; i++) {
       activeDrops[i].paused = false;
-      activeDrops[i].vposition = vpositions[i];
     }
+    vpositions.clear();
     notifyListeners();
     Navigator.pop(context);
   }

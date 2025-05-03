@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
               //   left: 0,
               //   right: 0,
               //   child: CloudWidget(),
-              // ),
+              //),
               Positioned(left: 0, right: 0, bottom: 0, child: GroundWidget()),
               Positioned(bottom: 0, left: 0, right: 0, child: KeyBoard()),
               Positioned(top: 80, right: 20, child: LevelCounter()),

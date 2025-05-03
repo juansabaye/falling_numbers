@@ -27,8 +27,9 @@ class NumberDrop extends StatefulWidget {
 
 class _NumberDropState extends State<NumberDrop>
     with SingleTickerProviderStateMixin {
-  AnimationController? animationController;
+  AnimationController? _animationController;
   Animation<double>? _animation;
+  bool wasPaused = false;
 
   @override
   void initState() {
@@ -36,35 +37,50 @@ class _NumberDropState extends State<NumberDrop>
     initDrop();
   }
 
-  void continueDrop() {
-    animationController?.forward();
-    setState(() {});
+  void resumeAnimation() {
+    if (wasPaused) {
+      final double remainingFraction =
+          1.0 - (widget.vposition) / (MediaQuery.of(context).size.height - 320);
+      _animation = Tween<double>(
+        begin: widget.vposition - ((1 - remainingFraction) * 320 * 1.5),
+        end: MediaQuery.of(context).size.height - 320,
+      ).animate(_animationController!);
+      _animationController!.forward();
+      wasPaused = false;
+    }
   }
 
   @override
   void dispose() {
-    animationController?.dispose();
+    _animationController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    var controller = context.read<GameController>();
+    widget.paused = context.watch<GameController>().activeDrops.any(
+      (drop) => drop.key == widget.key && drop.paused,
+    );
     return AnimatedBuilder(
       animation: _animation ?? AlwaysStoppedAnimation(0),
       builder: (context, child) {
-        double vposition = _animation?.value ?? 0;
-        if (vposition >= MediaQuery.of(context).size.height - 320) {
+        widget.vposition = _animation?.value ?? 0;
+
+        if (widget.vposition >= MediaQuery.of(context).size.height - 320) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            var controller = context.read<GameController>();
             controller.finishGame(controller);
           });
         }
         if (widget.paused) {
-          animationController?.stop();
+          wasPaused = true;
+          _animationController?.stop();
+        } else {
+          resumeAnimation();
         }
         return Positioned(
           left: widget.hposition,
-          top: vposition,
+          top: widget.vposition,
           child: Center(
             child:
                 widget.exploded
@@ -84,15 +100,15 @@ class _NumberDropState extends State<NumberDrop>
 
   void initDrop() async {
     await Future.delayed(Duration.zero);
-    animationController = AnimationController(
+    _animationController = AnimationController(
       duration: Duration(seconds: widget.speed),
       vsync: this,
     );
     _animation = Tween<double>(
-      begin: -50.0,
+      begin: 0.0,
       end: MediaQuery.of(context).size.height - 320,
-    ).animate(animationController!);
-    animationController?.forward();
+    ).animate(_animationController!);
+    _animationController?.forward();
     setState(() {});
   }
 }
