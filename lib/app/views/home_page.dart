@@ -1,3 +1,4 @@
+import 'package:falling_numbers/app/atoms/cloud_widget.dart';
 import 'package:falling_numbers/app/atoms/ground_widget.dart';
 import 'package:falling_numbers/app/atoms/keyboard.dart';
 import 'package:falling_numbers/app/atoms/level_counter.dart';
@@ -36,13 +37,12 @@ class _HomePageState extends State<HomePage> {
                 bottom: 0,
                 child: RainView(),
               ),
-
-              // Positioned(
-              //   top: -kToolbarHeight * 1.6,
-              //   left: 0,
-              //   right: 0,
-              //   child: CloudWidget(),
-              //),
+              Positioned(
+                top: -kToolbarHeight * 1.6,
+                left: 0,
+                right: 0,
+                child: CloudWidget(),
+              ),
               Positioned(left: 0, right: 0, bottom: 0, child: GroundWidget()),
               Positioned(bottom: 0, left: 0, right: 0, child: KeyBoard()),
               Positioned(top: 80, right: 20, child: LevelCounter()),
