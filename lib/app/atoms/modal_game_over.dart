@@ -1,4 +1,5 @@
 import 'package:falling_numbers/app/controller/game_controller.dart';
+import 'package:falling_numbers/app/enums/music_enum.dart';
 import 'package:flutter/material.dart';
 
 class ModalGameOver extends StatelessWidget {
@@ -7,11 +8,25 @@ class ModalGameOver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LevelTypeEnum level = controller.currentlevel;
     return Container(
       height: 400,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/background.png'),
+          image: switch (level) {
+            LevelTypeEnum.soft => AssetImage(
+              'assets/images/backgroundSoft.png',
+            ),
+            LevelTypeEnum.medium => AssetImage(
+              'assets/images/backgroundMedium.png',
+            ),
+            LevelTypeEnum.doom => AssetImage(
+              'assets/images/backgroundDoom.png',
+            ),
+            LevelTypeEnum.none => AssetImage(
+              'assets/images/backgroundSoft.png',
+            ),
+          },
           fit: BoxFit.cover,
         ),
         borderRadius: BorderRadius.only(

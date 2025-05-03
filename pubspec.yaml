@@ -34,6 +34,7 @@ dependencies:
   flutter_lints: ^5.0.0
   shared_preferences: ^2.5.3
   flutter_launcher_icons: ^0.14.3
+  audioplayers: ^6.4.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -63,9 +64,31 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
      - assets/images/background.png
-     - assets/images/clouds.png
-     - assets/images/ground.png
-     - assets/images/b.png
+     - assets/images/cloudsSoft.png
+     - assets/images/cloudsMedium.png
+     - assets/images/cloudsDoom.png
+     - assets/images/groundSoft.png
+     - assets/images/groundMedium.png
+     - assets/images/groundDoom.png
+     - assets/images/background.png
+     - assets/images/backgroundSoft.png
+     - assets/images/backgroundMedium.png
+     - assets/images/backgroundDoom.png
+     - assets/images/drop.png
+     - assets/images/stone.png
+     - assets/images/demon.gif
+     - assets/images/explotionSoft.gif
+     - assets/images/explotionMedium.gif
+     - assets/images/explotionDoom.gif
+     - assets/sounds/musicSoft.mp3
+     - assets/sounds/musicMedium.mp3
+     - assets/sounds/musicDoom.mp3
+     - assets/sounds/explotionSoft.mp3
+     - assets/sounds/explotionMedium.mp3
+     - assets/sounds/explotionDoom.mp3
+     - assets/images/botonSoft.png
+     - assets/images/botonMedium.png
+     - assets/images/botonDoom.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

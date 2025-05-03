@@ -1,5 +1,7 @@
+import 'package:falling_numbers/app/controller/game_controller.dart';
 import 'package:falling_numbers/app/views/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
@@ -63,9 +65,15 @@ class SplashPage extends StatelessWidget {
               const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(
-                    context,
-                  ).push(MaterialPageRoute(builder: (context) => HomePage()));
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder:
+                          (context) => ChangeNotifierProvider(
+                            create: (context) => GameController(),
+                            child: HomePage(),
+                          ),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.teal,

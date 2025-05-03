@@ -1,7 +1,9 @@
 import 'dart:math';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:falling_numbers/app/atoms/modal_game_over.dart';
 import 'package:falling_numbers/app/atoms/modal_pause.dart';
 import 'package:falling_numbers/app/atoms/number_drop.dart';
+import 'package:falling_numbers/app/enums/music_enum.dart';
 import 'package:falling_numbers/app/my_app.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +15,8 @@ class GameController extends ChangeNotifier {
   final Random random = Random();
   List<double> vpositions = [];
   bool playingGame = true;
+  LevelTypeEnum currentlevel = LevelTypeEnum.none;
+  final player = AudioPlayer();
 
   BuildContext get context => navigatorKey.currentState!.context;
   void addNewDrops() async {
@@ -31,6 +35,16 @@ class GameController extends ChangeNotifier {
         ),
       );
       notifyListeners();
+      if (dropCount >= 20) {
+        playMusic(LevelTypeEnum.doom);
+        print('20');
+      } else if (dropCount >= 10) {
+        playMusic(LevelTypeEnum.medium);
+        print('10');
+      } else if (dropCount >= 0) {
+        playMusic(LevelTypeEnum.soft);
+        print('0');
+      }
     }
   }
 
@@ -50,16 +64,18 @@ class GameController extends ChangeNotifier {
   }
 
   void removeDrops(numberShot) {
-    if (activeDrops.isNotEmpty) {
-      int index = activeDrops.indexWhere((drop) => drop.number == numberShot);
-      if (index != -1) {
-        activeDrops.removeAt(index);
-        notifyListeners();
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (activeDrops.isNotEmpty) {
+        int index = activeDrops.indexWhere((drop) => drop.number == numberShot);
+        if (index != -1) {
+          activeDrops.removeAt(index);
+          notifyListeners();
+        }
       }
-    }
-    if (activeDrops.isEmpty) {
-      nextLevel();
-    }
+      if (activeDrops.isEmpty) {
+        nextLevel();
+      }
+    });
   }
 
   void explode(numberShot) {
@@ -68,6 +84,7 @@ class GameController extends ChangeNotifier {
       if (index != -1) {
         activeDrops[index].exploded = true;
         notifyListeners();
+        playExplotion(currentlevel);
       }
     }
     if (activeDrops.isEmpty) {
@@ -76,6 +93,7 @@ class GameController extends ChangeNotifier {
   }
 
   void resetGame() {
+    currentlevel = LevelTypeEnum.none;
     addStreak(dropCount);
     activeDrops.clear();
     dropCount = 1;
@@ -92,7 +110,7 @@ class GameController extends ChangeNotifier {
   void finishGame(controller) async {
     activeDrops.clear();
     notifyListeners();
-
+    player.stop();
     showModalBottomSheet(
       context: context,
       isScrollControlled: false,
@@ -136,5 +154,52 @@ class GameController extends ChangeNotifier {
     vpositions.clear();
     notifyListeners();
     Navigator.pop(context);
+  }
+
+  Future<void> playMusic(LevelTypeEnum level) async {
+    if (currentlevel != level) {
+      switch (level) {
+        case LevelTypeEnum.soft:
+          player.stop();
+          await player.play(AssetSource('sounds/musicSoft.mp3'));
+          currentlevel = LevelTypeEnum.soft;
+          break;
+        case LevelTypeEnum.medium:
+          player.stop();
+          await player.play(AssetSource('sounds/musicMedium.mp3'));
+          currentlevel = LevelTypeEnum.medium;
+          break;
+        case LevelTypeEnum.doom:
+          player.stop();
+          await player.play(AssetSource('sounds/musicDoom.mp3'));
+          currentlevel = LevelTypeEnum.doom;
+          break;
+        case LevelTypeEnum.none:
+          break;
+      }
+    }
+  }
+
+  Future<void> playExplotion(LevelTypeEnum level) async {
+    final playerExplotion = AudioPlayer();
+    switch (level) {
+      case LevelTypeEnum.soft:
+        playerExplotion.stop();
+        await playerExplotion.play(AssetSource('sounds/explotionSoft.mp3'));
+        currentlevel = LevelTypeEnum.soft;
+        break;
+      case LevelTypeEnum.medium:
+        playerExplotion.stop();
+        await playerExplotion.play(AssetSource('sounds/explotionMedium.mp3'));
+        currentlevel = LevelTypeEnum.medium;
+        break;
+      case LevelTypeEnum.doom:
+        playerExplotion.stop();
+        await playerExplotion.play(AssetSource('sounds/explotionDoom.mp3'));
+        currentlevel = LevelTypeEnum.doom;
+        break;
+      case LevelTypeEnum.none:
+        break;
+    }
   }
 }

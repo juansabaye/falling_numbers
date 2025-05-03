@@ -1,4 +1,5 @@
 import 'package:falling_numbers/app/controller/game_controller.dart';
+import 'package:falling_numbers/app/enums/music_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -62,6 +63,7 @@ class _NumberDropState extends State<NumberDrop>
     widget.paused = context.watch<GameController>().activeDrops.any(
       (drop) => drop.key == widget.key && drop.paused,
     );
+    LevelTypeEnum level = context.watch<GameController>().currentlevel;
     return AnimatedBuilder(
       animation: _animation ?? AlwaysStoppedAnimation(0),
       builder: (context, child) {
@@ -84,13 +86,59 @@ class _NumberDropState extends State<NumberDrop>
           child: Center(
             child:
                 widget.exploded
-                    ? Text(
-                      '💥',
-                      style: const TextStyle(color: Colors.white, fontSize: 30),
+                    ? Center(
+                      child: switch (level) {
+                        LevelTypeEnum.soft => Image.asset(
+                          'assets/images/explotionSoft.gif',
+                          width: 50,
+                          height: 50,
+                        ),
+                        LevelTypeEnum.medium => Image.asset(
+                          'assets/images/explotionMedium.gif',
+                          width: 50,
+                          height: 50,
+                        ),
+                        LevelTypeEnum.doom => Image.asset(
+                          'assets/images/explotionDoom.gif',
+                          width: 50,
+                          height: 50,
+                        ),
+                        LevelTypeEnum.none => Image.asset(
+                          'assets/images/explotionSoft.gif',
+                          width: 50,
+                          height: 50,
+                        ),
+                      },
                     )
-                    : Text(
-                      '${widget.number}',
-                      style: const TextStyle(color: Colors.white, fontSize: 18),
+                    : Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        image: switch (level) {
+                          LevelTypeEnum.soft => DecorationImage(
+                            image: AssetImage('assets/images/drop.png'),
+                          ),
+                          LevelTypeEnum.medium => DecorationImage(
+                            image: AssetImage('assets/images/stone.png'),
+                          ),
+                          LevelTypeEnum.doom => DecorationImage(
+                            image: AssetImage('assets/images/demon.gif'),
+                          ),
+                          LevelTypeEnum.none => DecorationImage(
+                            image: AssetImage('assets/images/drop.png'),
+                          ),
+                        },
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${widget.number}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
           ),
         );

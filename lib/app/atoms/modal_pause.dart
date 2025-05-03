@@ -1,4 +1,5 @@
 import 'package:falling_numbers/app/controller/game_controller.dart';
+import 'package:falling_numbers/app/enums/music_enum.dart';
 import 'package:flutter/material.dart';
 
 class ModalPause extends StatelessWidget {
@@ -9,9 +10,16 @@ class ModalPause extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 400,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/background.png'),
+          image: switch (controller.currentlevel) {
+            LevelTypeEnum.soft => AssetImage('assets/images/groundSoft.png'),
+            LevelTypeEnum.medium => AssetImage(
+              'assets/images/groundMedium.png',
+            ),
+            LevelTypeEnum.doom => AssetImage('assets/images/groundDoom.png'),
+            LevelTypeEnum.none => AssetImage('assets/images/groundSoft.png'),
+          },
           fit: BoxFit.cover,
         ),
         borderRadius: BorderRadius.only(
