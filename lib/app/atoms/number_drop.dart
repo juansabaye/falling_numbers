@@ -2,11 +2,24 @@ import 'package:falling_numbers/app/controller/game_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class NumberDrop extends StatefulWidget {
   final int number;
-  final double position;
+  final double hposition;
+  int speed;
+  bool exploded;
+  bool paused;
+  double vposition;
 
-  const NumberDrop({super.key, required this.number, required this.position});
+  NumberDrop({
+    super.key,
+    required this.number,
+    required this.hposition,
+    this.exploded = false,
+    this.speed = 1,
+    this.paused = false,
+    this.vposition = 0,
+  });
 
   @override
   State<NumberDrop> createState() => _NumberDropState();
@@ -14,7 +27,7 @@ class NumberDrop extends StatefulWidget {
 
 class _NumberDropState extends State<NumberDrop>
     with SingleTickerProviderStateMixin {
-  AnimationController? _controller;
+  AnimationController? animationController;
   Animation<double>? _animation;
 
   @override
@@ -23,9 +36,14 @@ class _NumberDropState extends State<NumberDrop>
     initDrop();
   }
 
+  void continueDrop() {
+    animationController?.forward();
+    setState(() {});
+  }
+
   @override
   void dispose() {
-    _controller?.dispose();
+    animationController?.dispose();
     super.dispose();
   }
 
@@ -34,21 +52,30 @@ class _NumberDropState extends State<NumberDrop>
     return AnimatedBuilder(
       animation: _animation ?? AlwaysStoppedAnimation(0),
       builder: (context, child) {
-        double value = _animation?.value ?? 0;
-        if (value >= MediaQuery.of(context).size.height - 200) {
+        double vposition = _animation?.value ?? 0;
+        if (vposition >= MediaQuery.of(context).size.height - 320) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             var controller = context.read<GameController>();
             controller.finishGame(controller);
           });
         }
+        if (widget.paused) {
+          animationController?.stop();
+        }
         return Positioned(
-          left: widget.position,
-          top: value,
+          left: widget.hposition,
+          top: vposition,
           child: Center(
-            child: Text(
-              '${widget.number}',
-              style: const TextStyle(color: Colors.white, fontSize: 18),
-            ),
+            child:
+                widget.exploded
+                    ? Text(
+                      '💥',
+                      style: const TextStyle(color: Colors.white, fontSize: 30),
+                    )
+                    : Text(
+                      '${widget.number}',
+                      style: const TextStyle(color: Colors.white, fontSize: 18),
+                    ),
           ),
         );
       },
@@ -57,15 +84,15 @@ class _NumberDropState extends State<NumberDrop>
 
   void initDrop() async {
     await Future.delayed(Duration.zero);
-    _controller = AnimationController(
-      duration: const Duration(seconds: 5),
+    animationController = AnimationController(
+      duration: Duration(seconds: widget.speed),
       vsync: this,
     );
     _animation = Tween<double>(
       begin: -50.0,
-      end: MediaQuery.of(context).size.height - 200,
-    ).animate(_controller!);
-    _controller?.forward();
+      end: MediaQuery.of(context).size.height - 320,
+    ).animate(animationController!);
+    animationController?.forward();
     setState(() {});
   }
 }

@@ -6,7 +6,7 @@ class GroundWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 180,
+      height: 320,
       width: double.infinity,
       decoration: const BoxDecoration(
         image: DecorationImage(

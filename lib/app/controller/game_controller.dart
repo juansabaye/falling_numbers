@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:falling_numbers/app/atoms/modal_game_over.dart';
+import 'package:falling_numbers/app/atoms/modal_pause.dart';
 import 'package:falling_numbers/app/atoms/number_drop.dart';
 import 'package:falling_numbers/app/my_app.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ class GameController extends ChangeNotifier {
   int dropCount = 1;
   int streak = 0;
   final Random random = Random();
+  List<double> vpositions = [];
 
   BuildContext get context => navigatorKey.currentState!.context;
   void addNewDrops() async {
@@ -18,8 +20,9 @@ class GameController extends ChangeNotifier {
       activeDrops.add(
         NumberDrop(
           number: random.nextInt(10),
-          position:
+          hposition:
               random.nextDouble() * (MediaQuery.of(context).size.width - 30),
+          speed: random.nextInt(4) + 5,
           key: UniqueKey(),
         ),
       );
@@ -39,7 +42,6 @@ class GameController extends ChangeNotifier {
   Future<int> getStreak() async {
     final sharedPrefs = await SharedPreferences.getInstance();
     final streak = sharedPrefs.getInt('streak') ?? 0;
-    print(streak);
     return streak;
   }
 
@@ -48,9 +50,22 @@ class GameController extends ChangeNotifier {
       int index = activeDrops.indexWhere((drop) => drop.number == numberShot);
       if (index != -1) {
         activeDrops.removeAt(index);
+        notifyListeners();
       }
     }
-    notifyListeners();
+    if (activeDrops.isEmpty) {
+      nextLevel();
+    }
+  }
+
+  void explode(numberShot) {
+    if (activeDrops.isNotEmpty) {
+      int index = activeDrops.indexWhere((drop) => drop.number == numberShot);
+      if (index != -1) {
+        activeDrops[index].exploded = true;
+        notifyListeners();
+      }
+    }
     if (activeDrops.isEmpty) {
       nextLevel();
     }
@@ -75,10 +90,38 @@ class GameController extends ChangeNotifier {
     notifyListeners();
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
+      isScrollControlled: false,
+      isDismissible: false,
+      enableDrag: false,
       builder: (BuildContext context) {
         return ModalGameOver(controller: controller);
       },
     );
+  }
+
+  void pause(controller) {
+    for (int i = 0; i < activeDrops.length; i++) {
+      vpositions.add(activeDrops[i].vposition);
+      activeDrops[i].paused = true;
+    }
+    notifyListeners();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (BuildContext context) {
+        return ModalPause(controller: controller);
+      },
+    );
+  }
+
+  void continueGame() {
+    for (int i = 0; i < activeDrops.length; i++) {
+      activeDrops[i].paused = false;
+      activeDrops[i].vposition = vpositions[i];
+    }
+    notifyListeners();
+    Navigator.pop(context);
   }
 }
