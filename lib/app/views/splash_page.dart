@@ -1,4 +1,5 @@
 import 'package:falling_numbers/app/controller/game_controller.dart';
+import 'package:falling_numbers/app/enums/music_enum.dart';
 import 'package:falling_numbers/app/views/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,9 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GameController controller = GameController();
+    controller.currentlevel = LevelTypeEnum.none;
+    controller.stopMusic();
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(

@@ -35,15 +35,12 @@ class GameController extends ChangeNotifier {
         ),
       );
       notifyListeners();
-      if (dropCount >= 20) {
+      if (dropCount >= 10) {
         playMusic(LevelTypeEnum.doom);
-        print('20');
-      } else if (dropCount >= 10) {
+      } else if (dropCount >= 5) {
         playMusic(LevelTypeEnum.medium);
-        print('10');
       } else if (dropCount >= 0) {
         playMusic(LevelTypeEnum.soft);
-        print('0');
       }
     }
   }
@@ -201,5 +198,9 @@ class GameController extends ChangeNotifier {
       case LevelTypeEnum.none:
         break;
     }
+  }
+
+  void stopMusic() {
+    player.stop();
   }
 }

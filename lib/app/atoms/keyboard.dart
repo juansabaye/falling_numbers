@@ -76,6 +76,8 @@ class KeyBoard extends StatelessWidget {
               InkWell(
                 onTap: () {
                   Navigator.pop(context);
+                  var controller = context.read<GameController>();
+                  controller.stopMusic();
                 },
                 child: ButtonWidget(
                   child: Icon(
@@ -89,7 +91,6 @@ class KeyBoard extends StatelessWidget {
                 onTap: () {
                   var controller = context.read<GameController>();
                   controller.explode(0);
-
                   controller.removeDrops(0);
                 },
                 child: ButtonWidget(
