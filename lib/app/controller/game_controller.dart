@@ -19,6 +19,9 @@ class GameController extends ChangeNotifier {
   final player = AudioPlayer();
 
   BuildContext get context => navigatorKey.currentState!.context;
+  final audioContext =
+      AudioContextConfig(focus: AudioContextConfigFocus.mixWithOthers).build();
+
   void addNewDrops() async {
     for (int i = 0; i < dropCount; i++) {
       await Future.delayed(const Duration(milliseconds: 400));
@@ -154,6 +157,7 @@ class GameController extends ChangeNotifier {
   }
 
   Future<void> playMusic(LevelTypeEnum level) async {
+    await player.setAudioContext(audioContext);
     if (currentlevel != level) {
       switch (level) {
         case LevelTypeEnum.soft:
@@ -179,21 +183,31 @@ class GameController extends ChangeNotifier {
 
   Future<void> playExplotion(LevelTypeEnum level) async {
     final playerExplotion = AudioPlayer();
+    await playerExplotion.setAudioContext(audioContext);
     switch (level) {
       case LevelTypeEnum.soft:
-        playerExplotion.stop();
-        await playerExplotion.play(AssetSource('sounds/explotionSoft.mp3'));
         currentlevel = LevelTypeEnum.soft;
+        await playerExplotion.play(AssetSource('sounds/explotionSoft.mp3'));
+        Future.delayed(const Duration(milliseconds: 1000), () {
+          playerExplotion.stop();
+          playerExplotion.dispose();
+        });
         break;
       case LevelTypeEnum.medium:
-        playerExplotion.stop();
-        await playerExplotion.play(AssetSource('sounds/explotionMedium.mp3'));
         currentlevel = LevelTypeEnum.medium;
+        await playerExplotion.play(AssetSource('sounds/explotionMedium.mp3'));
+        Future.delayed(const Duration(milliseconds: 1000), () {
+          playerExplotion.stop();
+          playerExplotion.dispose();
+        });
         break;
       case LevelTypeEnum.doom:
-        playerExplotion.stop();
-        await playerExplotion.play(AssetSource('sounds/explotionDoom.mp3'));
         currentlevel = LevelTypeEnum.doom;
+        await playerExplotion.play(AssetSource('sounds/explotionDoom.mp3'));
+        Future.delayed(const Duration(milliseconds: 1000), () {
+          playerExplotion.stop();
+          playerExplotion.dispose();
+        });
         break;
       case LevelTypeEnum.none:
         break;
